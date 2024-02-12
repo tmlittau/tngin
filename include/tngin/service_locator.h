@@ -11,6 +11,15 @@ class ServiceLocator {
             if (_window != nullptr) return;
             _window = std::unique_ptr<Window>(window);
         }
+
+        static inline void shutdownServices() {
+            ShutdownWindow();
+        }
     private:
         static inline std::unique_ptr<Window> _window = nullptr;
+
+        static inline void ShutdownWindow() {
+            _window.reset();
+            _window = nullptr;
+        }
 };
