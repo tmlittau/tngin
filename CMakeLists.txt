@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.25)
 project(tngin_engine VERSION 0.0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 
 # add external libraries
-add_subdirectory(external/glm)
-add_subdirectory(external/glfw)
+find_package(glm REQUIRED)
+find_package(glfw3 REQUIRED)
 
 file(GLOB SOURCES "src/*.cpp", "src/*/*.cpp", "src/*/*/*.cpp", "src/*/*/*/*.cpp")
 
@@ -20,9 +20,9 @@ target_include_directories(${PROJECT_NAME}
         glfw
 )
 
-target_link_libraries(${PROJECT_NAME}
-    PUBLIC
-        glm
+target_link_libraries(${PROJECT_NAME} 
+    PUBLIC 
+        glm::glm
     PRIVATE
         glfw
 )
