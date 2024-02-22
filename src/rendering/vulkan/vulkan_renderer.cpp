@@ -1,6 +1,7 @@
 #include "vulkan_renderer.h"
 
 #include <VkBootstrap.h>
+#include <tngin/service_locator.h>
 
 #include "vulkan_initializers.h"
 #include "vulkan_types.h"
@@ -39,5 +40,13 @@ namespace TAL {
 
         _instance = vkbInstance.instance;
         _debug_messenger = vkbInstance.debug_messenger;
+
+        // request vulkan surface
+        std::unordered_map<SurfaceArgs, std::any> surfaceArgs {
+            {SurfaceArgs::INSTANCE, _instance},
+            {SurfaceArgs::ALLOCATORS, nullptr},
+            {SurfaceArgs::OUT_SURFACE, &_surface}
+        };
+        ServiceLocator::GetWindow()->RequestDrawSurface(surfaceArgs);
    }
 }

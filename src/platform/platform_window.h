@@ -11,6 +11,9 @@ namespace TAL {
             PlatformWindow();
             void OpenWindow(WindowData data) override;
             bool Update() override;
+
+            void RequestDrawSurface(std::unordered_map<SurfaceArgs, std::any> args) override;
+
         private:
             GLFWwindow* _window;
     };
