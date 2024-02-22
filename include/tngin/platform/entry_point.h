@@ -6,7 +6,7 @@
 
 int main(int argc, char** argv) {
     // Create Game
-    auto* aGame = CreateGame();
+    auto* aGame = TAL::CreateGame();
 
     // Run the application
     aGame->Run();
