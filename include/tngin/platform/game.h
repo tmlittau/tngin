@@ -2,28 +2,30 @@
 
 #include <string>
 
-class Game {
-public:
-    Game();
-    explicit Game(std::string windowTitle);
+namespace TAL {
+    class Game {
+    public:
+        Game();
+        explicit Game(std::string windowTitle);
 
-    virtual ~Game(); 
+        virtual ~Game(); 
 
-    // method to run main game
-    void Run();
-protected:
-    virtual void Update(float deltaTime) {};
-    virtual void PhysicsUpdate(float deltaTime) {};
+        // method to run main game
+        void Run();
+    protected:
+        virtual void Update(float deltaTime) {};
+        virtual void PhysicsUpdate(float deltaTime) {};
 
-private:
-    void initializeServices();
-    void shutdownServices();
+    private:
+        void initializeServices();
+        void shutdownServices();
 
-public:
+    public:
 
-private:
-    std::string _windowTitle;
-    bool _running;
-};
+    private:
+        std::string _windowTitle;
+        bool _running;
+    };
 
-extern Game* CreateGame();
+    extern Game* CreateGame();
+}

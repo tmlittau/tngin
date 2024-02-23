@@ -3,60 +3,64 @@
 #include <tngin/service_locator.h>
 
 #include "platform_window.h"
+#include "rendering/ogl/ogl_renderer.h"
 
-Game::Game() : Game("TNGIN Game") {}
+namespace TAL {
+    Game::Game() : Game("TNGIN Game") {}
 
-Game::Game(std::string windowTitle) : _windowTitle(std::move(windowTitle)), _running(true) {
-    initializeServices();
-}
-
-Game::~Game() {
-    shutdownServices();
-}
-
-void Game::Run() {
-    std::cout << "Running Game!" << std::endl;
-
-    // Open the Window
-    ServiceLocator::GetWindow()->OpenWindow({
-        .title = _windowTitle,
-        .width = 800,
-        .height = 600
-    });
-
-    // Game Loop
-    while(_running) {
-        // Update the window
-        if(ServiceLocator::GetWindow()->Update()) {
-            _running = false;
-            continue;
-        }
-
-        // calculate deltaTime
-
-        // Update game state
-        Update(0.0f);
-
-        // Update physics
-        PhysicsUpdate(0.0f);
-
-        // Draw
+    Game::Game(std::string windowTitle) : _windowTitle(std::move(windowTitle)), _running(true) {
+        initializeServices();
     }
-}
 
-void Game::initializeServices() {
-    std::cout << "Initializing Services!" << std::endl;
+    Game::~Game() {
+        shutdownServices();
+    }
 
-    // Provide a window    
-    ServiceLocator::Provide(new PlatformWindow());
+    void Game::Run() {
+        std::cout << "Running Game!" << std::endl;
+        // Game Loop
+        while(_running) {
+            // Update the window
+            if(ServiceLocator::GetWindow()->Update()) {
+                _running = false;
+                continue;
+            }
 
-    // Initialize input system
+            // calculate deltaTime
 
-    // Initialize renderer
-}
+            // Update game state
+            Update(0.0f);
 
-void Game::shutdownServices() {
-    std::cout << "Shutting down Services!" << std::endl;
+            // Update physics
+            PhysicsUpdate(0.0f);
 
-    ServiceLocator::shutdownServices();
+            // Draw
+            ServiceLocator::GetRenderer()->RenderFrame();
+        }
+    }
+
+    void Game::initializeServices() {
+        std::cout << "Initializing Services!" << std::endl;
+
+        // Provide a window    
+        ServiceLocator::Provide(new PlatformWindow());
+
+        // Open the Window
+        ServiceLocator::GetWindow()->OpenWindow({
+            .title = _windowTitle,
+            .width = 1920,
+            .height = 1080
+        });
+
+        // Initialize input system
+
+        // Initialize renderer
+        ServiceLocator::Provide(new OGLRenderer());
+    }
+
+    void Game::shutdownServices() {
+        std::cout << "Shutting down Services!" << std::endl;
+
+        ServiceLocator::shutdownServices();
+    }
 }
