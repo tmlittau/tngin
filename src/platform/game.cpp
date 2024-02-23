@@ -59,7 +59,6 @@ namespace TAL {
         RendererSettings settings {
             .app_name = _title
         };
-
         ServiceLocator::Provide(new VulkanRenderer, settings);
     }
 

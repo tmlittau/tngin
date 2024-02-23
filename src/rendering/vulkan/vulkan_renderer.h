@@ -32,5 +32,8 @@ namespace TAL {
             VkPhysicalDevice _physical_device;
             VkDevice _device;                   // logical device
             VkSurfaceKHR _surface;
+
+            VkQueue _graphicsQueue;
+            uint32_t _graphicsQueueFamily;
     };
 }

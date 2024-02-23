@@ -34,5 +34,12 @@ namespace TAL {
                 _window.reset();
                 _window = nullptr;
             }
+
+            static inline void shutdownRenderer() {
+                if (!_renderer) return;
+
+                _renderer->Shutdown();
+                _renderer = nullptr;
+            }
     };
 }

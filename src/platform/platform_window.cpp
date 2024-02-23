@@ -23,13 +23,13 @@ namespace TAL {
         return glfwWindowShouldClose(_window);
     }
 
-    void PlatformWindow::RequestDrawSurface(std::unordered_map<SurfaceArgs, std::any> args) {
+    void PlatformWindow::RequestDrawSurface(std::unordered_map<SurfaceArgs, int*> args) {
 
         // Extract what we need
         try {
-            auto vkInstance = std::any_cast<VkInstance>(args[SurfaceArgs::INSTANCE]);
-            auto* allocationCallbacks = std::any_cast<VkAllocationCallbacks*>(args[SurfaceArgs::ALLOCATORS]);
-            auto outSurface = std::any_cast<VkSurfaceKHR*>(args[SurfaceArgs::OUT_SURFACE]);
+            auto vkInstance = reinterpret_cast<VkInstance>(args[SurfaceArgs::INSTANCE]);
+            auto* allocationCallbacks = reinterpret_cast<VkAllocationCallbacks*>(args[SurfaceArgs::ALLOCATORS]);
+            auto outSurface = reinterpret_cast<VkSurfaceKHR*>(args[SurfaceArgs::OUT_SURFACE]);
 
             if (glfwCreateWindowSurface(vkInstance, _window, allocationCallbacks, outSurface)!= VK_SUCCESS) {
                 throw std::runtime_error("Failed to create window surface!");
