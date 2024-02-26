@@ -2,24 +2,24 @@
 
 #include <memory>
 #include <tngin/platform/window.h>
-#include <tngin/rendering/renderer.h>
+#include <tngin/rendering/graphic_engine.h>
 
 namespace TAL {
     class ServiceLocator {
         public:
             static inline const std::unique_ptr<Window>& GetWindow() { return _window; };
-            static inline Renderer* GetRenderer() { return _renderer.get(); };
+            static inline GraphicsEngine* GetGraphicsEngine() { return _graphics_engine.get(); };
 
             static inline void Provide(Window* window) {
                 if (_window != nullptr) return;
                 _window = std::unique_ptr<Window>(window);
             }
 
-            static inline void Provide(Renderer* renderer) {
-                if (_renderer != nullptr) return;
+            static inline void Provide(GraphicsEngine* graphics_engine) {
+                if (_graphics_engine != nullptr) return;
                 
-                _renderer = std::unique_ptr<Renderer>(renderer);
-                _renderer->Init();
+                _graphics_engine = std::unique_ptr<GraphicsEngine>(graphics_engine);
+                _graphics_engine->Init();
             }
 
             static inline void shutdownServices() {
@@ -27,18 +27,18 @@ namespace TAL {
             }
         private:
             static inline std::unique_ptr<Window> _window = nullptr;
-            static inline std::unique_ptr<Renderer> _renderer = nullptr;
+            static inline std::unique_ptr<GraphicsEngine> _graphics_engine = nullptr;
 
             static inline void ShutdownWindow() {
                 _window.reset();
                 _window = nullptr;
             }
 
-            static inline void ShutdownRenderer() {
-                if (!_renderer) return;
+            static inline void ShutdownGraphicsEngine() {
+                if (!_graphics_engine) return;
 
-                _renderer->Shutdown();
-                _renderer = nullptr;
+                _graphics_engine->Shutdown();
+                _graphics_engine = nullptr;
             }
     };
 }

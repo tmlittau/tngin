@@ -1,6 +1,7 @@
 #pragma once
 
 #include <tngin/platform/window.h>
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 namespace TAL {

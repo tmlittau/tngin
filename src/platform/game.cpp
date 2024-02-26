@@ -3,7 +3,7 @@
 #include <tngin/service_locator.h>
 
 #include "platform_window.h"
-#include "rendering/ogl/ogl_renderer.h"
+#include "rendering/Graphics/tngin_graphics.h"
 
 namespace TAL {
     Game::Game() : Game("TNGIN Game") {}
@@ -35,7 +35,7 @@ namespace TAL {
             PhysicsUpdate(0.0f);
 
             // Draw
-            ServiceLocator::GetRenderer()->RenderFrame();
+            ServiceLocator::GetGraphicsEngine()->RenderFrame();
         }
     }
 
@@ -55,7 +55,7 @@ namespace TAL {
         // Initialize input system
 
         // Initialize renderer
-        ServiceLocator::Provide(new OGLRenderer());
+        ServiceLocator::Provide(new TNGINGraphics());
     }
 
     void Game::shutdownServices() {

@@ -7,6 +7,12 @@ namespace TAL {
 
     void PlatformWindow::OpenWindow(WindowData data) {
         glfwInit();
+        
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        
 
         _window = glfwCreateWindow(data.width, data.height, data.title.c_str(), nullptr, nullptr);
 
@@ -22,12 +28,18 @@ namespace TAL {
         glfwSetErrorCallback(error_callback);
         glfwSetKeyCallback(_window, key_callback);
 
+        GLenum err = glewInit();
+
+        if (GLEW_OK != err) {
+            fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
+        }
+
     }
 
     bool PlatformWindow::Update() {
-        glfwSwapBuffers(_window);
-
         glfwPollEvents();
+
+        glfwSwapBuffers(_window);
         
         return glfwWindowShouldClose(_window);
     }
