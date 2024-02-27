@@ -29,3 +29,14 @@ target_link_libraries(${PROJECT_NAME}
     PRIVATE
         glfw
 )
+
+# Copy over the shaders to target directory
+ADD_CUSTOM_TARGET(copy_shaders ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+    ${CMAKE_CURRENT_BINARY_DIR}/../../shaders
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/shaders
+    COMMENT "Copying shaders"
+)
+
+ADD_DEPENDENCIES(${PROJECT_NAME} copy_shaders)

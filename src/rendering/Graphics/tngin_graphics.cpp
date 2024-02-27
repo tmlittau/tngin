@@ -8,6 +8,10 @@
 namespace TAL {
     GLuint VBO;
     GLuint VAO;
+    int vertex_count = 500;
+
+    float scale = 0.0f;
+    float factor = 1.0f;
 
     void TNGINGraphics::Init() {
         // Initialize OpenGL
@@ -26,9 +30,16 @@ namespace TAL {
 
         glUseProgram(_shader_programme);
 
+        
+        scale += factor*0.01f;
+        if (scale > 1.0f || scale < 0.0f) factor *= -1.0f;
+        
+
+        glUniform1f(_gScaleLocation, scale);
+
         glBindVertexArray(VAO);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawArrays(GL_TRIANGLES, 0, vertex_count*3);
 
 
     }
@@ -37,24 +48,22 @@ namespace TAL {
         // Create a vertex buffer with a triangle with vertices at (-1, -1, 0), (0, 1, 0) and (1, -1, 0)
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
-        glEnable(GL_CULL_FACE);
-        glFrontFace(GL_CW);
+        //glEnable(GL_CULL_FACE);
+        //glFrontFace(GL_CW);
         
-        float vertices[] = {
-            0.0f,  0.5f,  0.0f,
-            0.5f, -0.5f,  0.0f,
-            -0.5f, -0.5f,  0.0f
-        };
+        std::vector<glm::vec3> vertices;
+
+        BuildCircle(vertices, 1.0f, vertex_count);
 
         glGenBuffers(1, &VBO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, 9*sizeof(float), vertices, GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
 
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
         glEnableVertexAttribArray(0);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
         
     }
 
@@ -82,6 +91,14 @@ namespace TAL {
         glAttachShader(_shader_programme, fs);
         glAttachShader(_shader_programme, vs);
         glLinkProgram(_shader_programme);
+
+        // link Uniform Location to property
+        _gScaleLocation = glGetUniformLocation(_shader_programme, "gScale");
+
+        if (_gScaleLocation == -1) {
+            fprintf(stderr, "Error finding 'gScale'\n");
+            exit(1);
+        }
     }
 
     GLuint TNGINGraphics::AddShader(const char* pShaderText, GLenum ShaderType)
@@ -103,4 +120,5 @@ namespace TAL {
 
         return ShaderObj;
     }
+
 }

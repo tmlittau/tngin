@@ -48,7 +48,7 @@ namespace TAL {
         // Open the Window
         ServiceLocator::GetWindow()->OpenWindow({
             .title = _windowTitle,
-            .width = 1920,
+            .width = 1080,
             .height = 1080
         });
 

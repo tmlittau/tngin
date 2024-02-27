@@ -1,5 +1,6 @@
 #pragma once
 
+#include <glm/glm.hpp>
 #include <GL/glew.h>
 #include <OpenGL/gltypes.h>
 #include <OpenGL/gl.h>
@@ -24,5 +25,6 @@ namespace TAL {
 
         private:
             GLuint _shader_programme;
+            GLint _gScaleLocation;
     };
 }
