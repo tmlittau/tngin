@@ -18,6 +18,9 @@ namespace TAL {
 
     void Game::Run() {
         std::cout << "Running Game!" << std::endl;
+        int framesCounter = 0;
+
+        _gameState = LOGO;
         // Game Loop
         while(_running) {
             // Update the window
@@ -29,13 +32,15 @@ namespace TAL {
             // calculate deltaTime
 
             // Update game state
-            Update(0.0f);
+            Update();
 
             // Update physics
             PhysicsUpdate(0.0f);
 
             // Draw
             ServiceLocator::GetGraphicsEngine()->RenderFrame();
+
+            framesCounter++;
         }
     }
 
@@ -48,7 +53,7 @@ namespace TAL {
         // Open the Window
         ServiceLocator::GetWindow()->OpenWindow({
             .title = _windowTitle,
-            .width = 1080,
+            .width = 1920,
             .height = 1080
         });
 

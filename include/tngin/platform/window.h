@@ -13,5 +13,7 @@ namespace TAL {
         public:
             virtual void OpenWindow(WindowData data) = 0;
             virtual bool Update() = 0;
+
+            ~Window() = default;
     };
 }

@@ -1,11 +1,9 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <GL/glew.h>
-#include <OpenGL/gltypes.h>
-#include <OpenGL/gl.h>
-
 #include <tngin/rendering/graphic_engine.h>
+#include <tngin/platform/game.h>
+
+#include <raylib.h>
 
 namespace TAL {
     class TNGINGraphics : public GraphicsEngine {
@@ -17,14 +15,10 @@ namespace TAL {
             void RenderFrame() override;
 
         private:
-            void CreateVertexBuffer();
-            void CreateShaders(const char* pVSFileName, const char* pFSFileName);
-            GLuint AddShader(const char* pShaderText, GLenum ShaderType);
 
         public:
-
+            
         private:
-            GLuint _shader_programme;
-            GLint _gScaleLocation;
+
     };
 }
