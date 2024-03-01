@@ -3,6 +3,8 @@
 #include <iostream>
 #include <fstream>
 
+#include <assert.h>
+
 namespace TAL {
     bool ReadFile(const char* pFileName, std::string& outFile)
     {

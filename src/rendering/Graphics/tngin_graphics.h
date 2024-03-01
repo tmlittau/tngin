@@ -18,6 +18,7 @@ namespace TAL {
 
         private:
             void CreateVertexBuffer();
+            void CreateIndexBuffer();
             void CreateShaders(const char* pVSFileName, const char* pFSFileName);
             GLuint AddShader(const char* pShaderText, GLenum ShaderType);
 
@@ -25,6 +26,6 @@ namespace TAL {
 
         private:
             GLuint _shader_programme;
-            GLint _gScaleLocation;
+            GLint _gWorld;
     };
 }

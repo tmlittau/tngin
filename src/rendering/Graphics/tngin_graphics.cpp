@@ -8,9 +8,11 @@
 namespace TAL {
     GLuint VBO;
     GLuint VAO;
-    int vertex_count = 500;
+    GLuint IBO;
 
-    float scale = 0.0f;
+    int vertex_count = 0;
+
+    float scale = 1.0f;
     float factor = 1.0f;
 
     void TNGINGraphics::Init() {
@@ -33,38 +35,105 @@ namespace TAL {
         
         scale += factor*0.01f;
         if (scale > 1.0f || scale < 0.0f) factor *= -1.0f;
-        
 
-        glUniform1f(_gScaleLocation, scale);
+        Matrix4f World(scale, 0.0f, 0.0f, 0.0f,
+                        0.0f, scale, 0.0f, 0.0f,
+                        0.0f, 0.0f, scale, 0.0f,
+                        0.0f, 0.0f, 0.0f, 1.0f);
+
+        glUniformMatrix4fv(_gWorld, 1, GL_TRUE, &World.m[0][0]);
 
         glBindVertexArray(VAO);
 
-        glDrawArrays(GL_TRIANGLES, 0, vertex_count*3);
+        glDrawArrays(GL_TRIANGLES, 0, vertex_count);
 
 
     }
 
     void TNGINGraphics::CreateVertexBuffer() {
-        // Create a vertex buffer with a triangle with vertices at (-1, -1, 0), (0, 1, 0) and (1, -1, 0)
+        // Create a vertex buffer for an object to be rendered
         glEnable(GL_DEPTH_TEST);
         glDepthFunc(GL_LESS);
         //glEnable(GL_CULL_FACE);
         //glFrontFace(GL_CW);
-        
-        std::vector<glm::vec3> vertices;
+        vertex_count = 19;
 
-        BuildCircle(vertices, 1.0f, vertex_count);
+        Vertex vertices[vertex_count];
+
+        // Center
+        vertices[0] = Vertex(0.0f, 0.0);
+
+        // Top row
+        vertices[1] = Vertex(-1.0f,  1.0f);
+        vertices[2] = Vertex(-0.75f, 1.0f);
+        vertices[3] = Vertex(-0.50f, 1.0f);
+        vertices[4] = Vertex(-0.25f, 1.0f);
+        vertices[5] = Vertex(-0.0f,  1.0f);
+        vertices[6] = Vertex(0.25f,  1.0f);
+        vertices[7] = Vertex(0.50f,  1.0f);
+        vertices[8] = Vertex(0.75f,  1.0f);
+        vertices[9] = Vertex(1.0f,   1.0f);
+
+        // Bottom row
+        vertices[10] = Vertex(-1.0f,  -1.0f);
+        vertices[11] = Vertex(-0.75f, -1.0f);
+        vertices[12] = Vertex(-0.50f, -1.0f);
+        vertices[13] = Vertex(-0.25f, -1.0f);
+        vertices[14] = Vertex(-0.0f,  -1.0f);
+        vertices[15] = Vertex(0.25f,  -1.0f);
+        vertices[16] = Vertex(0.50f,  -1.0f);
+        vertices[17] = Vertex(0.75f,  -1.0f);
+        vertices[18] = Vertex(1.0f,   -1.0f);
+        
+
+        //BuildCircle(vertices, 1.0f, vertex_count);
 
         glGenBuffers(1, &VBO);
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * vertices.size(), &vertices[0], GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+        CreateIndexBuffer();
 
         glGenVertexArrays(1, &VAO);
         glBindVertexArray(VAO);
         glEnableVertexAttribArray(0);
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), NULL);
+        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
         
+    }
+
+    void TNGINGraphics::CreateIndexBuffer() {
+        // Create the corresponding Index Buffer to the Vertex Buffer
+        unsigned int indices[] = { // Top triangles
+                               0, 2, 1,
+                               0, 3, 2,
+                               0, 4, 3,
+                               0, 5, 4,
+                               0, 6, 5,
+                               0, 7, 6,
+                               0, 8, 7,
+                               0, 9, 8,
+
+                               // Bottom triangles
+                               0, 10, 11,
+                               0, 11, 12,
+                               0, 12, 13,
+                               0, 13, 14,
+                               0, 14, 15,
+                               0, 15, 16,
+                               0, 16, 17,
+                               0, 17, 18,
+
+                               // Left triangle
+                               0, 1, 10,
+
+                               // Right triangle
+                               0, 18, 9 };
+
+        glGenBuffers(1, &IBO);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
     }
 
     void TNGINGraphics::CreateShaders(const char* pVSFileName, const char* pFSFileName)
@@ -93,9 +162,9 @@ namespace TAL {
         glLinkProgram(_shader_programme);
 
         // link Uniform Location to property
-        _gScaleLocation = glGetUniformLocation(_shader_programme, "gScale");
+        _gWorld = glGetUniformLocation(_shader_programme, "gWorld");
 
-        if (_gScaleLocation == -1) {
+        if (_gWorld == -1) {
             fprintf(stderr, "Error finding 'gScale'\n");
             exit(1);
         }
