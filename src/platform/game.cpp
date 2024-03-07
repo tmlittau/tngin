@@ -4,6 +4,7 @@
 
 #include "platform_window.h"
 #include "rendering/Graphics/tngin_graphics.h"
+#include "rendering/Graphics/tngin_camera.h"
 
 namespace TAL {
     Game::Game() : Game("TNGIN Game") {}
@@ -48,9 +49,12 @@ namespace TAL {
         // Open the Window
         ServiceLocator::GetWindow()->OpenWindow({
             .title = _windowTitle,
-            .width = 1080,
+            .width = 1920,
             .height = 1080
         });
+
+        // Initialize camera
+        ServiceLocator::Provide(new TNGINCamera());
 
         // Initialize input system
 

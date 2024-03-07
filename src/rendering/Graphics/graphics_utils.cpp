@@ -1,8 +1,7 @@
-#include "graphics_utils.h"
+#include <tngin/rendering/graphics_utils.h>
 
 #include <iostream>
 #include <fstream>
-
 #include <assert.h>
 
 namespace TAL {
@@ -41,22 +40,4 @@ namespace TAL {
         #endif
     }
 
-    void BuildCircle(std::vector<glm::vec3>& vertices, float radius, int vCount) {
-        float angle = 360.0f / vCount;
-
-        int triangleCount = vCount - 2;
-
-        std::vector<glm::vec3> tempVertices;
-
-        for (int i = 0; i < vCount; i++) {
-            float currentAngle = angle * i;
-            tempVertices.push_back(glm::vec3(radius * cos(glm::radians(currentAngle)), radius * sin(glm::radians(currentAngle)), 0.0f));
-        }
-
-        for (int i = 0; i < triangleCount; i++) {
-            vertices.push_back(tempVertices[0]);
-            vertices.push_back(tempVertices[i + 1]);
-            vertices.push_back(tempVertices[i + 2]);
-        }
-    }
 }

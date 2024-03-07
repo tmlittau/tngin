@@ -1,5 +1,7 @@
 #include "platform_window.h"
 
+#include <tngin/service_locator.h>
+
 namespace TAL {
     PlatformWindow::PlatformWindow() {
         _window = nullptr;
@@ -44,6 +46,12 @@ namespace TAL {
         return glfwWindowShouldClose(_window);
     }
 
+    float PlatformWindow::GetAspectRatio() const {
+        int width, height;
+        glfwGetFramebufferSize(_window, &width, &height);
+        return (float)width / (float)height;
+    }
+
     void PlatformWindow::error_callback(int error, const char* description)
     {
         fprintf(stderr, "Error: %s\n", description);
@@ -53,5 +61,13 @@ namespace TAL {
     {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
             glfwSetWindowShouldClose(window, GLFW_TRUE);
+        if ((key == GLFW_KEY_W || key == GLFW_KEY_UP) && action == GLFW_PRESS)
+            ServiceLocator::GetCamera()->Move(0.0f, 0.0f, 1.0f);
+        if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN) && action == GLFW_PRESS)
+            ServiceLocator::GetCamera()->Move(0.0f, 0.0f, -1.0f);
+        if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT) && action == GLFW_PRESS)
+            ServiceLocator::GetCamera()->Move(-1.0f, 0.0f, 0.0f);
+        if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS)
+            ServiceLocator::GetCamera()->Move(1.0f, 0.0f, 0.0f);
     }
 }

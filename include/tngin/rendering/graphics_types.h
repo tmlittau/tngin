@@ -265,7 +265,7 @@ namespace TAL {
             return sqrt(x * x + y * y + z * z + w * w);
         }
 
-        Vector4f Normalize();
+        Vector4f& Normalize();
 
         float Dot(const Vector4f& v) const
         {
@@ -375,8 +375,7 @@ namespace TAL {
     struct PersProjInfo
     {
         float FOV;
-        float Width;
-        float Height;
+        float ar;
         float zNear;
         float zFar;
     };
@@ -454,6 +453,50 @@ namespace TAL {
                 m[3][2] = a32;
                 m[3][3] = a33;
             }
+
+            inline Matrix4f operator*(const Matrix4f& Right) const
+            {
+                Matrix4f Ret;
+
+                for (unsigned int i = 0 ; i < 4 ; i++) {
+                    for (unsigned int j = 0 ; j < 4 ; j++) {
+                        Ret.m[i][j] = m[i][0] * Right.m[0][j] +
+                                    m[i][1] * Right.m[1][j] +
+                                    m[i][2] * Right.m[2][j] +
+                                    m[i][3] * Right.m[3][j];
+                    }
+                }
+
+                return Ret;
+            }
+
+            void Print() const
+            {
+                for (int i = 0 ; i < 4 ; i++) {
+                    printf("%f %f %f %f\n", m[i][0], m[i][1], m[i][2], m[i][3]);
+                }
+            }
+
+            void InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ);
+
+            void InitRotateTransform(float RotateX, float RotateY, float RotateZ);
+
+            void InitTranslationTransform(float x, float y, float z);
+
+            void InitCameraTransform(const Vector3f& Target, const Vector3f& Up);
+
+            void InitCameraTransform(const Vector3f& Pos, const Vector3f& Target, const Vector3f& Up);
+
+            void InitPersProjTransform(const PersProjInfo& p);
+            
+            void InitOrthoProjTransform(const OrthoProjInfo& p);
+
+        private:
+            void InitRotationX(float RotateX);
+            void InitRotationY(float RotateY);
+            void InitRotationZ(float RotateZ);
+        
+
     };
 
     struct Vertex {
@@ -470,7 +513,17 @@ namespace TAL {
             float green = (float)rand() / (float)RAND_MAX;
             float blue = (float)rand() / (float)RAND_MAX;
             color = Vector3f(red, green, blue);
-        }
+        };
+
+        Vertex(float x, float y, float z)
+        {
+            pos = Vector3f(x, y, z);
+
+            float red = (float)rand() / (float)RAND_MAX;
+            float green = (float)rand() / (float)RAND_MAX;
+            float blue = (float)rand() / (float)RAND_MAX;
+            color = Vector3f(red, green, blue);
+        };
     };
 
 }

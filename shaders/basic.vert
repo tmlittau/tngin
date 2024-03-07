@@ -12,5 +12,5 @@ out vec4 Color;
 
 void main() {
     gl_Position = gWorld * vec4(vp, 1.0);
-    Color = colors[gl_VertexID];
+    Color = vec4(inColor, 1.0f);
 }
