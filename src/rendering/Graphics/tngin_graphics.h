@@ -8,6 +8,7 @@
 #include <tngin/rendering/graphic_engine.h>
 #include <tngin/rendering/graphics_types.h>
 #include <tngin/rendering/graphics_transforms.h>
+#include <tngin/rendering/texture.h>
 
 #include "tngin_camera.h"
 
@@ -34,6 +35,9 @@ namespace TAL {
             GLuint _VBO;
             GLuint _VAO;
             GLuint _IBO;
+
+            GLuint _g_sampler_location;
+            Texture* _p_texture = NULL;
 
     };
 }

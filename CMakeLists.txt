@@ -39,4 +39,13 @@ ADD_CUSTOM_TARGET(copy_shaders ALL
     COMMENT "Copying shaders"
 )
 
+ADD_CUSTOM_TARGET(copy_textures ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_CURRENT_SOURCE_DIR}/textures
+    ${CMAKE_CURRENT_BINARY_DIR}/../../textures
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/textures
+    COMMENT "Copying textures"
+)
+
 ADD_DEPENDENCIES(${PROJECT_NAME} copy_shaders)
+ADD_DEPENDENCIES(${PROJECT_NAME} copy_textures)

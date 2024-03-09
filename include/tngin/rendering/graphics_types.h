@@ -500,30 +500,16 @@ namespace TAL {
     };
 
     struct Vertex {
-        Vector3f pos;
-        Vector3f color;
+        Vector3f _pos;
+        Vector2f _tex;
 
         Vertex() {};
 
-        Vertex(float x, float y)
+        Vertex(const Vector3f& pos, const Vector2f& tex)
         {
-            pos = Vector3f(x, y, 0.0f);
-
-            float red = (float)rand() / (float)RAND_MAX;
-            float green = (float)rand() / (float)RAND_MAX;
-            float blue = (float)rand() / (float)RAND_MAX;
-            color = Vector3f(red, green, blue);
-        };
-
-        Vertex(float x, float y, float z)
-        {
-            pos = Vector3f(x, y, z);
-
-            float red = (float)rand() / (float)RAND_MAX;
-            float green = (float)rand() / (float)RAND_MAX;
-            float blue = (float)rand() / (float)RAND_MAX;
-            color = Vector3f(red, green, blue);
-        };
+            _pos = pos;
+            _tex = tex;
+        }
     };
 
 }

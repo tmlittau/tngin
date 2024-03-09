@@ -23,6 +23,15 @@ namespace TAL {
         CreateVertexBuffer();
 
         CreateShaders("shaders/basic.vert", "shaders/basic.frag");
+
+        _p_texture = new Texture(GL_TEXTURE_2D, "textures/example.jpg");
+        if (!_p_texture->Load()) {
+            fprintf(stderr, "Error loading texture\n");
+            exit(1);
+        }
+
+        _p_texture->Bind(GL_TEXTURE0);
+        glUniform1i(_g_sampler_location, 0);
     }
 
     void TNGINGraphics::Shutdown() {
@@ -65,21 +74,27 @@ namespace TAL {
 
         Vertex vertices[vertex_count];
 
+        // prepare Texture Vectors
+        Vector2f t00(0.0f, 0.0f);
+        Vector2f t01(0.0f, 1.0f);
+        Vector2f t10(1.0f, 0.0f);
+        Vector2f t11(1.0f, 1.0f);
+
         // Cube Vertices
-        vertices[0] = Vertex(0.5f, 1.0f, 0.5f);
-        vertices[1] = Vertex(-0.5f,  1.0f, -0.5f);
-        vertices[2] = Vertex(-0.5f, 1.0f, 0.5f);
-        vertices[3] = Vertex(0.5f, 0.0f, -0.5f);
-        vertices[4] = Vertex(-0.5f, 0.0f, -0.5f);
-        vertices[5] = Vertex(0.5f,  1.0f, -0.5f);
-        vertices[6] = Vertex(0.5f,  0.0f, 0.5f);
-        vertices[7] = Vertex(-0.5f,  0.0f, 0.5f);
+        vertices[0] = Vertex(Vector3f(0.5f, 1.0f, 0.5f), t00);
+        vertices[1] = Vertex(Vector3f(-0.5f,  1.0f, -0.5f), t01);
+        vertices[2] = Vertex(Vector3f(-0.5f, 1.0f, 0.5f), t10);
+        vertices[3] = Vertex(Vector3f(0.5f, 0.0f, -0.5f), t11);
+        vertices[4] = Vertex(Vector3f(-0.5f, 0.0f, -0.5f), t00);
+        vertices[5] = Vertex(Vector3f(0.5f,  1.0f, -0.5f), t10);
+        vertices[6] = Vertex(Vector3f(0.5f,  0.0f, 0.5f), t01);
+        vertices[7] = Vertex(Vector3f(-0.5f,  0.0f, 0.5f), t11);
 
         // Ground Plane Vertices
-        vertices[8] = Vertex(-10.0f, 0.0f, -10.0f);
-        vertices[9] = Vertex(-10.0f, 0.0f, 10.0f);
-        vertices[10] = Vertex(10.0f, 0.0f, -10.0f);
-        vertices[11] = Vertex(10.0f, 0.0f, 10.0f);
+        vertices[8] = Vertex(Vector3f(-10.0f, 0.0f, -10.0f), t00);
+        vertices[9] = Vertex(Vector3f(-10.0f, 0.0f, 10.0f), t01);
+        vertices[10] = Vertex(Vector3f(10.0f, 0.0f, -10.0f), t10);
+        vertices[11] = Vertex(Vector3f(10.0f, 0.0f, 10.0f), t11);
 
         glGenBuffers(1, &_VBO);
         glBindBuffer(GL_ARRAY_BUFFER, _VBO);
@@ -89,8 +104,8 @@ namespace TAL {
         glBindVertexArray(_VAO);
         glEnableVertexAttribArray(0);
         glEnableVertexAttribArray(1);
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), NULL);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), NULL);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(3 * sizeof(float)));
 
         CreateIndexBuffer();
         

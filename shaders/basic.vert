@@ -1,16 +1,13 @@
 #version 400
 
 layout (location = 0) in vec3 vp;
-layout (location = 1) in vec3 inColor;
+layout (location = 1) in vec2 TexCoord;
 
 uniform mat4 gWorld;
 
-const vec4 colors[3] = vec4[3]( vec4(1, 0, 0, 1),
-                                vec4(0, 1, 0, 1),
-                                vec4(0, 0, 1, 1) );
-out vec4 Color;
+out vec2 TexCoord0;
 
 void main() {
     gl_Position = gWorld * vec4(vp, 1.0);
-    Color = vec4(inColor, 1.0f);
+    TexCoord0 = TexCoord;
 }
