@@ -10,8 +10,12 @@ namespace TAL {
             PlatformWindow();
             void OpenWindow(WindowData data) override;
             bool Update() override;
-            float GetAspectRatio() const override;
+
+            float GetWidth() const override;
+            float GetHeight() const override;
+            
             void SetKeyCallback() override;
+            void SetCursorCallback() override;
 
             static void error_callback(int error, const char* description);
         private:

@@ -9,6 +9,7 @@ namespace TAL {
 
             virtual void SetPosition(float x, float y, float z) = 0;
             virtual void Move(float x, float y, float z) = 0;
+            virtual void Rotate(float delta_x, float delta_y) = 0;
 
             virtual Matrix4f GetMatrix() = 0;
 
@@ -17,5 +18,8 @@ namespace TAL {
             Vector3f _target;
             Vector3f _up;
             float _speed = 1.0f;
+
+            float _angle_h;
+            float _angle_v;
     };
 }

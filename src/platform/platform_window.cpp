@@ -29,6 +29,9 @@ namespace TAL {
         // set glfw callbacks
         glfwSetErrorCallback(error_callback);
 
+        //glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
         GLenum err = glewInit();
 
         if (GLEW_OK != err) {
@@ -45,10 +48,16 @@ namespace TAL {
         return glfwWindowShouldClose(_window);
     }
 
-    float PlatformWindow::GetAspectRatio() const {
+    float PlatformWindow::GetWidth() const {
         int width, height;
         glfwGetFramebufferSize(_window, &width, &height);
-        return (float)width / (float)height;
+        return (float)width;
+    }
+
+    float PlatformWindow::GetHeight() const {
+        int width, height;
+        glfwGetFramebufferSize(_window, &width, &height);
+        return (float)height;
     }
 
     void PlatformWindow::error_callback(int error, const char* description)
@@ -59,5 +68,10 @@ namespace TAL {
     void PlatformWindow::SetKeyCallback()
     {
         glfwSetKeyCallback(_window, ServiceLocator::GetInputManager()->key_callback);
+    }
+
+    void PlatformWindow::SetCursorCallback()
+    {
+        glfwSetCursorPosCallback(_window, ServiceLocator::GetInputManager()->cursor_position_callback);
     }
 }

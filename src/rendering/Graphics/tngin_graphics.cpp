@@ -14,7 +14,7 @@ namespace TAL {
         float FOV = 45.0f;
         float zNear = 1.0f;
         float zFar = 100.0f;
-        float ar = ServiceLocator::GetWindow()->GetAspectRatio();
+        float ar = ServiceLocator::GetWindow()->GetWidth() / ServiceLocator::GetWindow()->GetHeight();
 
         _p_info = { FOV, ar, zNear, zFar };
 
@@ -38,7 +38,6 @@ namespace TAL {
         float YRotationAngle = 1.0f;
 
         _w_transform.SetTranslation(0.0f, 0.0f, 5.0f);
-        _w_transform.Rotate(0.0f, YRotationAngle, 0.0f);
         Matrix4f World = _w_transform.GetMatrix();
 
         Matrix4f View = ServiceLocator::GetCamera()->GetMatrix();
@@ -50,30 +49,37 @@ namespace TAL {
 
         glUniformMatrix4fv(_gWorld, 1, GL_TRUE, &WVP.m[0][0]);
 
-        glDrawElements(GL_TRIANGLES, 54, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 60, GL_UNSIGNED_INT, 0);
 
 
     }
 
     void TNGINGraphics::CreateVertexBuffer() {
         // Create a vertex buffer for an object to be rendered
-        //glEnable(GL_DEPTH_TEST);
+        glEnable(GL_DEPTH_TEST);
         //glDepthFunc(GL_LESS);
         glEnable(GL_CULL_FACE);
         glFrontFace(GL_CW);
         glCullFace(GL_BACK);
-        vertex_count = 8;
+        vertex_count = 8 + 4;
 
         Vertex vertices[vertex_count];
 
-        vertices[0] = Vertex(0.5f, 0.5f, 0.5f);
-        vertices[1] = Vertex(-0.5f,  0.5f, -0.5f);
-        vertices[2] = Vertex(-0.5f, 0.5f, 0.5f);
-        vertices[3] = Vertex(0.5f, -0.5f, -0.5f);
-        vertices[4] = Vertex(-0.5f, -0.5f, -0.5f);
-        vertices[5] = Vertex(0.5f,  0.5f, -0.5f);
-        vertices[6] = Vertex(0.5f,  -0.5f, 0.5f);
-        vertices[7] = Vertex(-0.5f,  -0.5f, 0.5f);
+        // Cube Vertices
+        vertices[0] = Vertex(0.5f, 1.0f, 0.5f);
+        vertices[1] = Vertex(-0.5f,  1.0f, -0.5f);
+        vertices[2] = Vertex(-0.5f, 1.0f, 0.5f);
+        vertices[3] = Vertex(0.5f, 0.0f, -0.5f);
+        vertices[4] = Vertex(-0.5f, 0.0f, -0.5f);
+        vertices[5] = Vertex(0.5f,  1.0f, -0.5f);
+        vertices[6] = Vertex(0.5f,  0.0f, 0.5f);
+        vertices[7] = Vertex(-0.5f,  0.0f, 0.5f);
+
+        // Ground Plane Vertices
+        vertices[8] = Vertex(-10.0f, 0.0f, -10.0f);
+        vertices[9] = Vertex(-10.0f, 0.0f, 10.0f);
+        vertices[10] = Vertex(10.0f, 0.0f, -10.0f);
+        vertices[11] = Vertex(10.0f, 0.0f, 10.0f);
 
         glGenBuffers(1, &_VBO);
         glBindBuffer(GL_ARRAY_BUFFER, _VBO);
@@ -104,7 +110,9 @@ namespace TAL {
             5, 0, 6,
             7, 4, 3,
             2, 1, 4,
-            0, 2, 7
+            0, 2, 7,
+            8, 9, 10,
+            10, 9, 11
                                 };
 
         glGenBuffers(1, &_IBO);
