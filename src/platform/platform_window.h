@@ -11,9 +11,9 @@ namespace TAL {
             void OpenWindow(WindowData data) override;
             bool Update() override;
             float GetAspectRatio() const override;
+            void SetKeyCallback() override;
 
             static void error_callback(int error, const char* description);
-            static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
         private:
             GLFWwindow* _window;
     };

@@ -28,7 +28,6 @@ namespace TAL {
 
         // set glfw callbacks
         glfwSetErrorCallback(error_callback);
-        glfwSetKeyCallback(_window, key_callback);
 
         GLenum err = glewInit();
 
@@ -57,17 +56,8 @@ namespace TAL {
         fprintf(stderr, "Error: %s\n", description);
     }
 
-    void PlatformWindow::key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
+    void PlatformWindow::SetKeyCallback()
     {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
-            glfwSetWindowShouldClose(window, GLFW_TRUE);
-        if ((key == GLFW_KEY_W || key == GLFW_KEY_UP) && action == GLFW_PRESS)
-            ServiceLocator::GetCamera()->Move(0.0f, 0.0f, 1.0f);
-        if ((key == GLFW_KEY_S || key == GLFW_KEY_DOWN) && action == GLFW_PRESS)
-            ServiceLocator::GetCamera()->Move(0.0f, 0.0f, -1.0f);
-        if ((key == GLFW_KEY_A || key == GLFW_KEY_LEFT) && action == GLFW_PRESS)
-            ServiceLocator::GetCamera()->Move(-1.0f, 0.0f, 0.0f);
-        if ((key == GLFW_KEY_D || key == GLFW_KEY_RIGHT) && action == GLFW_PRESS)
-            ServiceLocator::GetCamera()->Move(1.0f, 0.0f, 0.0f);
+        glfwSetKeyCallback(_window, ServiceLocator::GetInputManager()->key_callback);
     }
 }

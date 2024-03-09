@@ -4,6 +4,7 @@
 #include <tngin/platform/window.h>
 #include <tngin/rendering/graphic_engine.h>
 #include <tngin/rendering/camera.h>
+#include <tngin/input/input_manager.h>
 
 namespace TAL {
     class ServiceLocator {
@@ -11,6 +12,7 @@ namespace TAL {
             static inline const std::unique_ptr<Window>& GetWindow() { return _window; };
             static inline GraphicsEngine* GetGraphicsEngine() { return _graphics_engine.get(); };
             static inline Camera* GetCamera() { return _camera.get(); };
+            static inline InputManager* GetInputManager() { return _input_manager.get(); };
 
             static inline void Provide(Window* window) {
                 if (_window != nullptr) return;
@@ -31,6 +33,13 @@ namespace TAL {
                 _camera->Init();
             }
 
+            static inline void Provide(InputManager* input_manager) {
+                if (_input_manager != nullptr) return;
+
+                _input_manager = std::unique_ptr<InputManager>(input_manager);
+                _input_manager->Init();
+            }
+
             static inline void shutdownServices() {
                 ShutdownWindow();
             }
@@ -38,6 +47,7 @@ namespace TAL {
             static inline std::unique_ptr<Window> _window = nullptr;
             static inline std::unique_ptr<GraphicsEngine> _graphics_engine = nullptr;
             static inline std::unique_ptr<Camera> _camera = nullptr;
+            static inline std::unique_ptr<InputManager> _input_manager = nullptr;
 
             static inline void ShutdownWindow() {
                 _window.reset();

@@ -2,6 +2,8 @@
 #include <tngin/platform/game.h>
 #include <tngin/service_locator.h>
 
+#include <tngin/input/input_manager.h>
+
 #include "platform_window.h"
 #include "rendering/Graphics/tngin_graphics.h"
 #include "rendering/Graphics/tngin_camera.h"
@@ -57,6 +59,7 @@ namespace TAL {
         ServiceLocator::Provide(new TNGINCamera());
 
         // Initialize input system
+        ServiceLocator::Provide(new InputManager());
 
         // Initialize renderer
         ServiceLocator::Provide(new TNGINGraphics());

@@ -15,5 +15,6 @@ namespace TAL {
             virtual bool Update() = 0;
 
             virtual float GetAspectRatio() const = 0;
+            virtual void SetKeyCallback() = 0;
     };
 }
