@@ -23,6 +23,9 @@ namespace TAL {
             ServiceLocator::GetCamera()->Move(0.0f, 1.0f, 0.0f);
         if ((key == GLFW_KEY_PAGE_DOWN) && (action == GLFW_PRESS || action == GLFW_REPEAT))
             ServiceLocator::GetCamera()->Move(0.0f, -1.0f, 0.0f);
+
+        if ((key == GLFW_KEY_1) && action == GLFW_PRESS) ServiceLocator::GetGraphicsEngine()->BindCubeVAO();
+        if ((key == GLFW_KEY_2) && action == GLFW_PRESS) ServiceLocator::GetGraphicsEngine()->BindPyramidVAO();
     }
 
     void InputManager::cursor_position_callback(GLFWwindow* window, double xpos, double ypos) {

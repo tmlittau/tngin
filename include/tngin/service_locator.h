@@ -42,6 +42,7 @@ namespace TAL {
 
             static inline void shutdownServices() {
                 ShutdownWindow();
+                ShutdownGraphicsEngine();
             }
         private:
             static inline std::unique_ptr<Window> _window = nullptr;
